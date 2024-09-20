@@ -1,55 +1,74 @@
-resource "aws_iam_role" "test" {
-  name               = "test-role"
-  assume_role_policy = "${file("assume-role-policy.json")}"
+# Copyright (c) HashiCorp, Inc.
+# SPDX-License-Identifier: MPL-2.0
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "4.52.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "3.4.3"
+    }
+  }
+  required_version = ">= 1.1.0"
 }
 
-resource "aws_iam_policy" "policy" {
-  name        = "test-policy"
-  description = "A test policy"
-  policy      = "${file("policy-s3-bucket.json")}"
+provider "aws" {
+  region = "us-west-2"
 }
 
-resource "aws_iam_policy_attachment" "test-attach" {
-  name       = "test-attachment"
-  roles      = ["${aws_iam_role.test.name}"]
-  policy_arn = "${aws_iam_policy.policy.arn}"
+resource "random_pet" "sg" {}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
 }
 
-resource "aws_iam_instance_profile" "test_profile" {
-  name  = "test_profile"
-  roles = ["${aws_iam_role.test.name}"]
+resource "aws_instance" "web" {
+  ami                    = data.aws_ami.ubuntu.id
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.web-sg.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              apt-get update
+              apt-get install -y apache2
+              sed -i -e 's/80/8080/' /etc/apache2/ports.conf
+              echo "Hello World" > /var/www/html/index.html
+              systemctl restart apache2
+              EOF
 }
 
-resource "aws_instance" "main" {
-  ami                    = "ami-9a562df2"
-  instance_type          = "t2.small"
-  iam_instance_profile   = "${aws_iam_instance_profile.test_profile.name}"
-  vpc_security_group_ids = ["${aws_security_group.main.id}"]
+resource "aws_security_group" "web-sg" {
+  name = "${random_pet.sg.id}-sg"
+  ingress {
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  // connectivity to ubuntu mirrors is required to run `apt-get update` and `apt-get install apache2`
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
-resource "aws_security_group" "main" {
-  name        = "ssh"
-  description = "ssh"
-}
-
-resource "aws_security_group_rule" "ssh" {
-  security_group_id = "${aws_security_group.main.id}"
-  type              = "ingress"
-  protocol          = "tcp"
-  from_port         = 22
-  to_port           = 22
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "egress" {
-  security_group_id = "${aws_security_group.main.id}"
-  type              = "egress"
-  protocol          = "-1"
-  from_port         = 0
-  to_port           = 0
-  cidr_blocks       = ["0.0.0.0/0"]
-}
-
-output "ip" {
-  value = "${aws_instance.main.public_ip}"
+output "web-address" {
+  value = "${aws_instance.web.public_dns}:8080"
 }
