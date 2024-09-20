@@ -12,6 +12,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
+
 resource "aws_sqs_queue" "queue" {
   name = "s3-event-notification-queue"
 
