@@ -12,7 +12,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-module "cluster-eks-fiap" {
+module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "cluster-eks-fiap"
   cluster_version = "1.23"
@@ -20,9 +20,9 @@ module "cluster-eks-fiap" {
 }
 
 output "cluster_endpoint" {
-  value = module.cluster-eks-fiap
+  value = module.eks
 }
 
 output "cluster_name" {
-  value = module.cluster-eks-fiap.cluster_id
+  value = module.eks.cluster_id
 }
