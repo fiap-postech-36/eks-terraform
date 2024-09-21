@@ -28,5 +28,5 @@ output "cluster_name" {
 }
 
 output "node_group_role" {
-  value = module.eks.node_groups["eks_nodes"].iam_role_arn
+  value = module.cluster-eks-fiap.node_groups["eks_nodes"].iam_role_arn
 }
