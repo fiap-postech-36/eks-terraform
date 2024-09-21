@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-pod
+  template:
+    metadata:
+      name: api-pod
+      labels:
+        app: api-pod
+    spec:
+      initContainers:
+        - name: wait-for-database
+          image: busybox:1.28
+          command: ['sh', '-c', 'echo Setting up API, please wait! && sleep 20']
+      containers:
+        - name: api-restaurant-container
+          image: samuelmolendolff/api-restaurant:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: api-configmap
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /restaurante/api/v1/produto
+            periodSeconds: 10
+            failureThreshold: 2
+            initialDelaySeconds: 25
+          resources:
+            requests:
+              cpu: 10m

@@ -12,37 +12,37 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_sqs_queue" "queue" {
-  name = "s3-event-notification-queue"
-
-  policy = <<POLICY
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "sqs:SendMessage",
-      "Resource": "arn:aws:sqs:*:*:s3-event-notification-queue",
-      "Condition": {
-        "ArnEquals": { "aws:SourceArn": "${aws_s3_bucket.bucket.arn}" }
-      }
-    }
+module "cluster-eks-fiap" {
+  source          = "terraform-aws-modules/eks/aws"
+  cluster_name    = "cluster-eks-fiap"
+  cluster_version = "1.23"
+  subnets         = [
+    "subnet-0af1a2b0c4e87a8de",
+    "subnet-09bbc7703c198652c",
+    "subnet-0e7c53c46d04ec3e5",
+    "subnet-052032e23566308d6",
+    "subnet-0121249a88ef4bc0a",
+    "subnet-09da51e5d063c8baf"
   ]
-}
-POLICY
-}
-
-resource "aws_s3_bucket" "bucket" {
-  bucket = "poc-aws-s3-notification-sqs-bucket"
-}
-
-resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = aws_s3_bucket.bucket.id
-
-  queue {
-    queue_arn     = aws_sqs_queue.queue.arn
-    events        = ["s3:ObjectCreated:*"]
-    filter_suffix = ".log"
+  vpc_id          = "vpc-048be7ca8808d1272"  # Substitua pelo seu ID de VPC
+  node_groups = {
+    eks_nodes = {
+      desired_capacity = 2
+      max_capacity     = 3
+      min_capacity     = 1
+      instance_type    = "t3.medium"
+    }
   }
+}
+
+output "cluster_endpoint" {
+  value = module.cluster-eks-fiap
+}
+
+output "cluster_name" {
+  value = module.cluster-eks-fiap.cluster_id
+}
+
+output "node_group_role" {
+  value = module.eks.node_groups["eks_nodes"].iam_role_arn
 }
