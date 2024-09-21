@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 3.0"
+      version = "~> 5.0"
     }
   }
 }
@@ -24,7 +24,7 @@ module "cluster-eks-fiap" {
     "subnet-0121249a88ef4bc0a",
     "subnet-09da51e5d063c8baf"
   ]
-  vpc_id          = "vpc-048be7ca8808d1272"  # Substitua pelo seu ID de VPC
+  vpc_id          = "vpc-048be7ca8808d1272"
   node_groups = {
     eks_nodes = {
       desired_capacity = 2
