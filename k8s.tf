@@ -82,11 +82,6 @@ resource "kubernetes_deployment" "deploy_app" {
 resource "kubernetes_service" "service_app" {
   metadata {
     name      = "svc-api"
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type" : "nlb",
-      "service.beta.kubernetes.io/aws-load-balancer-scheme" : "internal",
-      "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled" : "true"
-    }
   }
   spec {
     selector = {
@@ -96,7 +91,7 @@ resource "kubernetes_service" "service_app" {
       port        = var.app_port
       target_port = var.app_target
     }
-    type = "LoadBalancer"
+    type = "NodePort"
   }
 }
 
