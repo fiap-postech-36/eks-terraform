@@ -74,3 +74,9 @@ variable "subnet_private_2" {
   type        = string
   default     = "10.0.4.0/24"
 }
+
+variable "instance_type" {
+  description = "EC2 type"
+  type        = string
+  default     = "t3.medium"
+}
