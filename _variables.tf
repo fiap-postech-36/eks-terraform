@@ -72,7 +72,7 @@ variable "subnet_private_1" {
 variable "subnet_private_2" {
   description = "CIDR block for the first subnet"
   type        = string
-  default     = "10.0.4.0/24"
+  default     = "10.0.5.0/24"
 }
 
 variable "instance_type" {

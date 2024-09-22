@@ -12,17 +12,13 @@ resource "aws_eks_cluster" "cluster" {
   }
 }
 
-data "aws_eks_cluster_auth" "cluster_auth" {
-  name = aws_eks_cluster.cluster.name
-}
-
 # EKS Node Group
 resource "aws_eks_node_group" "node_group" {
   cluster_name    = var.cluster_name
   node_group_name = "node_group"
   node_role_arn   = var.arn
   subnet_ids      = [
-    aws_subnet.private_subnet_1.id, 
+    aws_subnet.private_subnet_1.id,
     aws_subnet.private_subnet_2.id
   ]
 
