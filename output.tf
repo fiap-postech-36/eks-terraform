@@ -25,7 +25,3 @@ output "public_subnet_2_id" {
 output "app_name" {
   value = kubernetes_service.service_app.metadata[0].name
 }
-
-output "load_balancer_hostname" {
-  value = data.kubernetes_service.service_app.status[0].load_balancer[0].ingress[0].hostname
-}
