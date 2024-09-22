@@ -26,7 +26,7 @@ variable "arn" {
 
 variable "cluster_name" {
   type        = string
-  default     = "cluster"
+  default     = "cluster-restaurante"
 }
 
 variable "vpc_name" {

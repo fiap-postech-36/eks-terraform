@@ -4,13 +4,13 @@ resource "aws_vpc" "vpc_restaurante" {
 
 resource "aws_subnet" "public_subnet_1" {
   vpc_id            = aws_vpc.vpc_restaurante.id
-  cidr_block        = "subnet_public_1_cidr_block"
+  cidr_block        = var.subnet_public_1_cidr_block
   availability_zone = var.subnet_availability_zone_1
 }
 
 resource "aws_subnet" "public_subnet_2" {
   vpc_id            = aws_vpc.vpc_restaurante.id
-  cidr_block        = "subnet_public_2_cidr_block"
+  cidr_block        = var.subnet_public_2_cidr_block
   availability_zone = var.subnet_availability_zone_2
 }
 
