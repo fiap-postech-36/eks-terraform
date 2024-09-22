@@ -46,7 +46,7 @@ resource "aws_eks_node_group" "node_group" {
 
 # Security group to EKS Cluster
 resource "aws_security_group" "eks_security_group" {
-  vpc_id = aws_vpc.vpc_name.id
+  vpc_id = aws_vpc.vpc_restaurante.id
 
   ingress {
     from_port   = 0
