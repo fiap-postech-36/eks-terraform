@@ -37,12 +37,6 @@ resource "kubernetes_deployment" "deploy_app" {
           effect   = "NoSchedule"
         }
 
-        initContainers {
-          name    = "wait-for-database"
-          image   =  "busybox:1.28"
-          command = "['sh', '-c', 'echo Setting up API, please wait! && sleep 20']"
-        }
-
         container {
           name  = "api-restaurant-container"
           image = "samuelmolendolff/api-restaurant:latest"
@@ -75,7 +69,7 @@ resource "kubernetes_deployment" "deploy_app" {
             }
             initial_delay_seconds = 30
             period_seconds        = 25
-            failureThreshold      = 2
+            failure_threshold      = 2
           }
         }
       }
