@@ -4,10 +4,10 @@ resource "aws_eks_cluster" "cluster" {
 
   vpc_config {
     subnet_ids = [
-      "172.31.16.0/20",
-      "172.31.0.0/20",
-      "172.31.80.0/20",
-      "172.31.32.0/20"
+      aws_subnet.public_subnet_1.id,
+      aws_subnet.public_subnet_2.id,
+      aws_subnet.private_subnet_1.id,
+      aws_subnet.private_subnet_2.id
     ]
   }
 }
@@ -22,8 +22,8 @@ resource "aws_eks_node_group" "node_group" {
   node_group_name = "node_group"
   node_role_arn   = var.arn
   subnet_ids      = [
-      "172.31.80.0/20",
-      "172.31.32.0/20"
+    aws_subnet.private_subnet_1.id, 
+    aws_subnet.private_subnet_2.id
   ]
 
   scaling_config {
