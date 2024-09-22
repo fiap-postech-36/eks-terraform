@@ -1,7 +1,0 @@
-kind: ConfigMap
-metadata:
-  name: api-configmap
-data:
-  SPRING_DATASOURCE_URL: "jdbc:postgresql://svc-db:5432/restaurant"
-  SPRING_DATASOURCE_USERNAME: "postgres"
-  SPRING_DATASOURCE_PASSWORD: "postgres"
