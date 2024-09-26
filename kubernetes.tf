@@ -1,24 +1,3 @@
-resource "kubernetes_secret" "secret_food" {
-  metadata {
-    name = "secret-food"
-  }
-
-  type = "Opaque"
-
-  data = {
-    APPLICATION_VERSION          = var.image_version
-    APPLICATION_DATABASE_VERSION = "latest"
-    APPLICATION_PORT             = var.app_port
-    SPRING_DATASOURCE_USERNAME   = var.db_username
-    SPRING_DATASOURCE_PASSWORD   = var.db_password
-    ENABLE_FLYWAY                = var.enable_flyway
-  }
-
-  lifecycle {
-    prevent_destroy = false
-  }
-}
-
 resource "kubernetes_config_map" "cm_food" {
   metadata {
     name = "cm-food"
@@ -80,12 +59,6 @@ resource "kubernetes_deployment" "deployment_food_app" {
           env_from {
             config_map_ref {
               name = kubernetes_config_map.cm_food.metadata[0].name
-            }
-          }
-
-          env_from {
-            secret_ref {
-              name = kubernetes_secret.secret_food.metadata[0].name
             }
           }
 
