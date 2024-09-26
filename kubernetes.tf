@@ -108,7 +108,6 @@ resource "kubernetes_deployment" "deployment_food_app" {
 resource "kubernetes_service" "food_app_service" {
   metadata {
     name      = "service-food-app"
-    namespace = var.kubernetes_namespace
     annotations = {
       "service.beta.kubernetes.io/aws-load-balancer-type" : "nlb",
       "service.beta.kubernetes.io/aws-load-balancer-scheme" : "internal",
