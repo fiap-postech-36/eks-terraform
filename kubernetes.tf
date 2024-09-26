@@ -102,7 +102,7 @@ resource "kubernetes_deployment" "deployment_food_app" {
     }
   }
 
-  depends_on = [aws_eks_node_group.food_node_group]
+  depends_on = [aws_eks_node_group.food-node-group]
 }
 
 resource "kubernetes_service" "food_app_service" {

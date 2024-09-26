@@ -22,9 +22,9 @@ data "aws_eks_cluster_auth" "food_cluster_auth" {
 }
 
 # EKS Node Group
-resource "aws_eks_node_group" "food_node_group" {
+resource "aws_eks_node_group" "food-node-group" {
   cluster_name    = var.cluster_name
-  node_group_name = "restaurant_node_group"
+  node_group_name = "food-node-group"
   node_role_arn   = var.node_role_arn
   subnet_ids      = [
     aws_subnet.food_private_subnet_1.id,
@@ -58,7 +58,7 @@ resource "aws_eks_node_group" "food_node_group" {
   }
 
   tags = {
-    Name        = "food_node_group"
+    Name        = "food-node-group"
     Environment = var.environment
   }
 }
