@@ -13,6 +13,10 @@ resource "kubernetes_secret" "secret_food" {
     SPRING_DATASOURCE_PASSWORD   = var.db_password
     ENABLE_FLYWAY                = var.enable_flyway
   }
+
+  lifecycle {
+    prevent_destroy = false
+  }
 }
 
 resource "kubernetes_config_map" "cm_food" {
