@@ -102,7 +102,7 @@ variable "subnet_availability_zone_az_2" {
 variable "kubernetes_namespace" {
   description = "The Kubernetes namespace where the resources will be provisioned"
   type        = string
-  default     = "default"
+  default     = "food_app_service"
 }
 
 variable "cluster_name" {
