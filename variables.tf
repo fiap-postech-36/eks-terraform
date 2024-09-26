@@ -46,6 +46,7 @@ variable "node_role_arn" {
   description = "ARN of the IAM Role that will be associated with the Node Group"
   type        = string
   sensitive   = true
+  default     = "arn:aws:iam::013545085409:instance-profile/LabInstanceProfile"
 }
 
 # VPC configuration
@@ -133,12 +134,14 @@ variable "bucket_food_lambdas" {
 variable "db_username" {
   description = "Username for the database"
   type        = string
+  default     = "username"
 }
 
 variable "db_password" {
   description = "Password for the database"
   type        = string
   sensitive   = true
+  default     = "password"
 }
 
 variable "db_name" {
