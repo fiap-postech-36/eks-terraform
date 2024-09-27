@@ -12,6 +12,7 @@ variable "node_role_arn" {
   description = "Node role ARN"
   type = string
   sensitive = true
+  default  = "arn:aws:iam::013545085409:role/LabRole"
 }
 
 variable "db_host" {
