@@ -15,7 +15,6 @@ variable "node_role_arn" {
   default  = "arn:aws:iam::013545085409:role/LabRole"
 }
 
-
 variable "db_host" {
   type = string
   default = "dabaseurl:5432"
